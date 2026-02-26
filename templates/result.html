@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Result</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#eef2ff,#f5f3ff);
+    padding:40px;
+}
+
+.container{
+    max-width:850px;
+    margin:auto;
+    background:white;
+    padding:40px;
+    border-radius:18px;
+    box-shadow:0 18px 45px rgba(0,0,0,0.12);
+    text-align:center;
+.primary-btn{
+    margin-top:25px;
+    padding:14px 30px;
+    background:#6d7cff;
+    color:white;
+    border:none;
+    border-radius:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.3s ease;
+}
+
+.primary-btn:hover{
+    transform:translateY(-3px) scale(1.05);
+    box-shadow:0 12px 30px rgba(0,0,0,0.2);
+}
+
+.primary-btn:active{
+    transform:scale(0.97);
+}
+
+}
+
+h2{
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.breakdown{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:25px;
+    text-align:left;
+}
+
+.factor{
+    background:#f9fafc;
+    padding:10px 15px;
+    border-radius:8px;
+    font-size:14px;
+}
+
+canvas{
+    max-width:300px;
+    max-height:300px;
+    margin:20px auto;
+}
+
+.toggle{
+    margin-top:20px;
+    cursor:pointer;
+    color:#6d7cff;
+    font-weight:600;
+}
+
+.hidden{
+    display:none;
+    margin-top:10px;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 25px;
+    background:#6d7cff;
+    color:white;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>{{ level }}</h2>
+<h3 id="animatedScore"></h3>
+
+<canvas id="pieChart"></canvas>
+
+<div class="breakdown" id="scoreBreakdown"></div>
+
+<div class="toggle" onclick="document.getElementById('info').classList.toggle('hidden')">
+Why does this happen? ▼
+</div>
+
+
+<div id="info" class="hidden">
+{{ explanation }}
+</div>
+
+<button class="primary-btn" onclick="window.location.href='/advice'">
+View Advice →
+</button>
+</div>
+
+<script>
+
+let score={{ score }};
+let breakdown=JSON.parse('{{ breakdown|safe }}');
+let weights={{ breakdown|safe }};
+
+let current=0;
+let interval=setInterval(()=>{
+    if(current>=score){
+        clearInterval(interval);
+    }else{
+        current++;
+        document.getElementById("animatedScore").innerText=
+        "Stress Score: "+current+" / 50";
+    }
+},20);
+
+let labels=Object.keys(breakdown);
+let values=Object.values(breakdown);
+
+let maxValues={
+'sleep':6,'emotion':6,'energy':4,'nutrition':4,'concentration':4,
+'mental':4,'procrastination':4,'emotional_reactivity':4,
+'motivation':4,'restlessness':4,'physical':2,'social':2,'screen_time':2
+};
+
+let list="";
+labels.forEach((key,i)=>{
+    list+=`<div class="factor">${key} : ${values[i]} / ${maxValues[key]}</div>`;
+});
+document.getElementById("scoreBreakdown").innerHTML=list;
+
+new Chart(document.getElementById('pieChart'),{
+type:'pie',
+data:{
+labels:labels,
+datasets:[{
+data:values,
+backgroundColor:[
+'#a5b4fc','#c4b5fd','#ddd6fe','#bfdbfe','#bae6fd',
+'#bbf7d0','#fde68a','#fca5a5','#fbcfe8','#fdba74',
+'#93c5fd','#d8b4fe','#fcd34d']
+}]
+},
+options:{
+responsive:true,
+plugins:{
+legend:{position:'bottom'}
+}
+}
+});
+
+</script>
+
+</body>
+</html>
