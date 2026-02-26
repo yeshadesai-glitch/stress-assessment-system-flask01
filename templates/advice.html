@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Advice</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#eef2ff,#f5f3ff);
+    padding:40px;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    background:white;
+    padding:40px;
+    border-radius:18px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.1);
+}
+
+h2{
+    text-align:center;
+}
+
+ul{
+    margin-top:20px;
+    line-height:1.8;
+}
+
+li{
+    margin-bottom:10px;
+}
+
+button{
+    margin-top:25px;
+    padding:12px 25px;
+    background:#6d7cff;
+    color:white;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+}
+.back-btn{
+    background:transparent;
+    border:2px solid #6d7cff;
+    color:#6d7cff;
+    padding:8px 18px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+    transition:all 0.3s ease;
+    margin-bottom:20px;
+}
+
+.back-btn:hover{
+    background:#6d7cff;
+    color:white;
+    transform:translateX(-4px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<button class="back-btn" onclick="window.history.back()">
+← Back to Result
+</button>
+
+<h2>Recommended Actions</h2>
+
+<ul>
+{% for item in advice %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<button onclick="window.location.href='/'">Return Home</button>
+
+</div>
+
+</body>
+</html>
